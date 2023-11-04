@@ -1,8 +1,8 @@
 class Mutations::LoginUser < Mutations::BaseMutation
   argument :username, String, required: true, description: "Username to log in"
 
-  field :user, Types::LoginResponseType, null: false, description: "Return user who logged in"
-  field :errors, [String], null: true
+  field :user, Types::LoginResponseType, null: true, description: "Return user who logged in"
+  field :errors, [Types::LoginError], null: true
 
   def resolve(username:)
     if User.exists?(:username => username)
@@ -18,9 +18,16 @@ class Mutations::LoginUser < Mutations::BaseMutation
           errors: []
         }
       else
+        errors = user.errors.map do |error|
+          path = ["attributes", error.attribute.to_s.camelize(:lower)]
+          {
+            path: path,
+            message: error.message,
+          }
+        end
         {
           user: nil,
-          errors: user.errors.full_messages
+          errors: errors
         }
       end
     end
