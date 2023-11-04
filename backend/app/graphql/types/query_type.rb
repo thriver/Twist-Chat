@@ -2,30 +2,18 @@
 
 module Types
   class QueryType < Types::BaseObject
-    field :node, Types::NodeType, null: true, description: "Fetches an object given its ID." do
-      argument :id, ID, required: true, description: "ID of the object."
+
+    field :chatrooms, [Types::ChatroomType], null: false, description: "Return all chatrooms"
+    def chatrooms
+      Chatroom.all
     end
 
-    def node(id:)
-      context.schema.object_from_id(id, context)
+    field :chatroom_messages,
+          [Types::UserMessageType], null: false, description: "Return all messages for a chatroom"do
+      argument :id, ID, required: true
     end
-
-    field :nodes, [Types::NodeType, null: true], null: true, description: "Fetches a list of objects given a list of IDs." do
-      argument :ids, [ID], required: true, description: "IDs of the objects."
-    end
-
-    def nodes(ids:)
-      ids.map { |id| context.schema.object_from_id(id, context) }
-    end
-
-    # Add root-level fields here.
-    # They will be entry points for queries on your schema.
-
-    # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World!"
+    def chatroom_messages(id:)
+      UserMessage.all.where(chatroom_id=id).order(:created_at)
     end
   end
 end

@@ -7,6 +7,11 @@ gem "rails", "~> 7.1.1"
 
 gem "graphql"
 
+group :development do
+  gem 'graphiql-rails'
+  gem 'faker'
+end
+
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", "~> 1.4"
 
