@@ -10,15 +10,8 @@ class Mutations::PostMessage < Mutations::BaseMutation
   def resolve(username:, chatroom:, content:)
     user = User.find_by(:username => username)
     chatroom_record = Chatroom.find_by(:id => chatroom)
-    errors = []
-    if chatroom_record == nil
-      errors.append(ArgumentError.new("Chatroom with id, #{chatroom} does not exist"))
-    end
 
-    if user == nil
-      errors.append(ArgumentError.new("User, #{username} does not exist"))
-    end
-
+    errors = is_message_valid(chatroom_record, user, username, chatroom)
     if errors.count > 0
       return {
         "errors" => errors.map do |error|
@@ -30,7 +23,6 @@ class Mutations::PostMessage < Mutations::BaseMutation
         end
       }
     end
-
 
     message = UserMessage.new(user: user, chatroom: chatroom_record, content: content)
     if message.save
@@ -47,5 +39,17 @@ class Mutations::PostMessage < Mutations::BaseMutation
           end
       }
     end
+  end
+
+  def is_message_valid(chatroom_record, user, username, chatroom)
+    errors = []
+    if chatroom_record == nil
+      errors.append(ArgumentError.new("Chatroom with id, #{chatroom} does not exist"))
+    end
+
+    if user == nil
+      errors.append(ArgumentError.new("User, #{username} does not exist"))
+    end
+    errors
   end
 end

@@ -12,18 +12,8 @@ class Mutations::CreateChatroom < Mutations::BaseMutation
 
   def resolve(username:, prompt:, name:)
     user = User.find_by(:username => username)
-    does_chatroom_exist = Chatroom.where(:user_id => user ? user.id : -1).where(:name => name).count > 0
 
-    errors = []
-    if name.strip.eql? ""
-      errors.append(ArgumentError.new("Chatroom must have a non-blank name."))
-    elsif does_chatroom_exist
-      errors.append(ArgumentError.new("Chatroom with owner, #{user.username} and name #{name} already exists."))
-    end
-
-    if user == nil
-      errors.append(ArgumentError.new("User, #{username} does not exist"))
-    end
+    errors = is_chatroom_valid(name, user, username)
     if errors.count > 0
       return {
         "errors" => errors.map do |error|
@@ -36,7 +26,7 @@ class Mutations::CreateChatroom < Mutations::BaseMutation
       }
     end
 
-    chatroom = Chatroom.new(user: user, name: name, prompt: prompt.strip)
+    chatroom = Chatroom.new(user: user, name: name.strip, prompt: prompt.strip)
     if chatroom.save
       {"chatroom_id" => chatroom.id}
     else
@@ -51,5 +41,24 @@ class Mutations::CreateChatroom < Mutations::BaseMutation
           end
       }
     end
+  end
+
+  def is_chatroom_valid(name, user, username)
+    errors = []
+
+    does_chatroom_exist = Chatroom.where(:user_id => user ? user.id : -1).where(:name => name).count > 0
+
+    if name.strip.eql? ""
+      errors.append(ArgumentError.new("Chatroom must have a non-blank name."))
+    elsif does_chatroom_exist
+      # Chatroom can only exist if user also exists
+      errors.append(ArgumentError.new("Chatroom with owner, #{user.username} and name #{name} already exists."))
+    end
+
+    if user == nil
+      errors.append(ArgumentError.new("User, #{username} does not exist"))
+    end
+
+    errors
   end
 end
