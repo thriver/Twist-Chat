@@ -49,7 +49,6 @@ module Mutations
           post '/graphql', params: {query: query(username: random_username, chatroom: chatroom.id, content: content)}
         end.to change {UserMessage.count}.by(0)
         json = JSON.parse(response.body)
-        print(json["data"])
         expect(json["data"]["postMessage"]["errors"]).to eq [
                                                               {
                                                                 "message"=>"User, #{random_username} does not exist",

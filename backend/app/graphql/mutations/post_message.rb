@@ -1,4 +1,6 @@
 class Mutations::PostMessage < Mutations::BaseMutation
+  description "Post a message as a user to a chatroom"
+
   argument :username, String, required: true, description: "Username of user who posted the message"
   argument :chatroom, ID, required: true, description: "Chatroom ID message is posted in"
   argument :content, String, required: true, description: "Message content"
@@ -18,16 +20,6 @@ class Mutations::PostMessage < Mutations::BaseMutation
     end
 
     if errors.count > 0
-      print("here")
-      print({
-              errors => errors.map do |error|
-                path = ["attributes", error.class.to_s]
-                {
-                  path: path,
-                  message: error.to_s
-                }
-                end
-                })
       return {
         "errors" => errors.map do |error|
           path = ["attributes", error.class.to_s]

@@ -1,4 +1,6 @@
 class Mutations::LoginUser < Mutations::BaseMutation
+  description "Login as a user"
+
   argument :username, String, required: true, description: "Username to log in"
 
   field :user, Types::LoginResponseType, null: true, description: "Return user who logged in"
