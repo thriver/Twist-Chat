@@ -3,17 +3,20 @@
 module Types
   class QueryType < Types::BaseObject
 
-    field :chatrooms, [Types::ChatroomType], null: false, description: "Return all chatrooms"
+    field :chatrooms, [Types::ChatroomType], null: false,
+          description: "Return all chatrooms in chronological order"
     def chatrooms
-      Chatroom.all
+      Chatroom.all.order(:created_at)
     end
 
     field :chatroom_messages,
-          [Types::UserMessageType], null: false, description: "Return all messages for a chatroom"do
+          [Types::UserMessageType], null: false,
+          description: "Return all messages for a chatroom in chronological order"do
       argument :id, ID, required: true
     end
     def chatroom_messages(id:)
-      UserMessage.all.where(chatroom_id=id).order(:created_at)
+      chatroom = Chatroom.find(id)
+      chatroom.get_messages
     end
   end
 end
