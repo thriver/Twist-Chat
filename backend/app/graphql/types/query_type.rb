@@ -6,7 +6,7 @@ module Types
     field :chatrooms, [Types::ChatroomType], null: false,
           description: "Return all chatrooms in chronological order"
     def chatrooms
-      Chatroom.all.order(:created_at)
+      Chatroom.all.order(:created_at).joins(:user).select("Chatrooms.*, users.username")
     end
 
     field :chatroom_messages,

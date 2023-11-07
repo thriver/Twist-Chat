@@ -58,7 +58,6 @@ const LoginForm: React.FC = () => {
       onSubmit={handleLogin}
     >
       <h1 className="text-2xl">Please Input a Username:</h1>
-      {state.username}
       <div className="w-64">
         <BaseInput
           label="Username:"

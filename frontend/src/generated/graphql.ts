@@ -54,6 +54,8 @@ export interface PostMessageInput {
   readonly username: Scalars['String']['input'];
 }
 
+export type ChatroomPreviewFragment = { readonly __typename: 'Chatroom', readonly id: string, readonly name: string | null, readonly username: string };
+
 export type LoginMutationVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
@@ -61,7 +63,18 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { readonly login: { readonly __typename: 'LoginUserPayload', readonly user: { readonly __typename: 'LoginResponse', readonly username: string | null } | null, readonly errors: ReadonlyArray<{ readonly __typename: 'LoginError', readonly message: string }> | null } | null };
 
+export type getChatroomsQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type getChatroomsQuery = { readonly chatrooms: ReadonlyArray<{ readonly __typename: 'Chatroom', readonly id: string, readonly name: string | null, readonly username: string }> };
+
+export const ChatroomPreviewFragmentDoc = gql`
+    fragment ChatroomPreview on Chatroom {
+  id
+  name
+  username
+}
+    `;
 export const LoginDocument = gql`
     mutation Login($username: String!) {
   login(input: {username: $username}) {
@@ -100,6 +113,40 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const getChatroomsDocument = gql`
+    query getChatrooms {
+  chatrooms {
+    ...ChatroomPreview
+  }
+}
+    ${ChatroomPreviewFragmentDoc}`;
+
+/**
+ * __usegetChatroomsQuery__
+ *
+ * To run a query within a React component, call `usegetChatroomsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usegetChatroomsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usegetChatroomsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usegetChatroomsQuery(baseOptions?: Apollo.QueryHookOptions<getChatroomsQuery, getChatroomsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<getChatroomsQuery, getChatroomsQueryVariables>(getChatroomsDocument, options);
+      }
+export function usegetChatroomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<getChatroomsQuery, getChatroomsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<getChatroomsQuery, getChatroomsQueryVariables>(getChatroomsDocument, options);
+        }
+export type getChatroomsQueryHookResult = ReturnType<typeof usegetChatroomsQuery>;
+export type getChatroomsLazyQueryHookResult = ReturnType<typeof usegetChatroomsLazyQuery>;
+export type getChatroomsQueryResult = Apollo.QueryResult<getChatroomsQuery, getChatroomsQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
