@@ -65,7 +65,7 @@ const HomePage: React.FC = () => {
             onClick={() => setIsCreateChatroomModalOpen(true)}
           />
         </div>
-        <div className="flex flex-col gap-5 items-center">
+        <div className="flex flex-col gap-5 items-center pb-5">
           {listChatrooms()}
         </div>
       </div>

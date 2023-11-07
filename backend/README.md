@@ -4,6 +4,11 @@
 
 # How to Run:
 
+Add a local_env.yml file with keys:
+
+- OPENAI_ACCESS_TOKEN: "your openai secret key"
+- REQUEST_TIMEOUT: "number"
+
 In your console run:
 `bundle install`
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_04_000106) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_07_231159) do
   create_table "chatrooms", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "prompt"
@@ -18,6 +18,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_04_000106) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_chatrooms_on_user_id"
+  end
+
+  create_table "twist_messages", force: :cascade do |t|
+    t.integer "user_message_id", null: false
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_message_id"], name: "index_twist_messages_on_user_message_id"
   end
 
   create_table "user_messages", force: :cascade do |t|
@@ -37,6 +45,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_04_000106) do
   end
 
   add_foreign_key "chatrooms", "users"
+  add_foreign_key "twist_messages", "user_messages"
   add_foreign_key "user_messages", "chatrooms"
   add_foreign_key "user_messages", "users"
 end

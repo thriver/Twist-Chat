@@ -1,3 +1,3 @@
 class TwistMessage < ApplicationRecord
-  belongs_to :user_messages
+  belongs_to :user_message
 end

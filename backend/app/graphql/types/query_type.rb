@@ -16,7 +16,7 @@ module Types
     end
     def chatroom_messages(id:)
       chatroom = Chatroom.find(id)
-      chatroom.get_messages.joins(:user)
+      chatroom.get_messages
     end
   end
 end

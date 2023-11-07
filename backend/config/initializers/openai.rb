@@ -1,4 +1,6 @@
+require 'dotenv'
+
 OpenAI.configure do |config|
-    config.access_token = Rails.application.credentials.openai.api_key
-    config.request_timeout = Rails.application.credentials.openai.request_timeout
+    config.access_token = ENV["OPENAI_ACCESS_TOKEN"]
+    config.request_timeout = ENV["REQUEST_TIMEOUT"].to_i
 end

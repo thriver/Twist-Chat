@@ -26,7 +26,7 @@ class Mutations::PostMessage < Mutations::BaseMutation
 
     message = UserMessage.new(user: user, chatroom: chatroom_record, content: content)
     if message.save
-      nil
+      twist_message(message, chatroom_record)
     else
       {
         "errors" =>
@@ -51,5 +51,13 @@ class Mutations::PostMessage < Mutations::BaseMutation
       errors.append(ArgumentError.new("User, #{username} does not exist"))
     end
     errors
+  end
+
+  def twist_message(message, chatroom)
+    if chatroom.prompt == nil or chatroom.prompt.strip.equal?""
+      nil
+    else
+      message.twist_message
+    end
   end
 end

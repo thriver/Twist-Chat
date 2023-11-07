@@ -21,12 +21,12 @@ const MessageInput: React.FC = () => {
   const [postMessage, { data, reset }] = useMutation(POST_MESSAGE)
   const { state } = useUserState()
   const { chatroomId } = useParams()
-  const [currentMessage, setCurrentMessage] = useState<string>()
+  const [currentMessage, setCurrentMessage] = useState<string | null>(null)
 
   useEffect(() => {
     if (data) {
       if (data?.postMessage?.errors) {
-        window.alert(data.createChatroom.errors[0].message)
+        window.alert(data.postMessage.errors[0].message)
       }
       reset()
     }
@@ -50,7 +50,7 @@ const MessageInput: React.FC = () => {
         name="message-input"
         placeholder="Your Message"
         onChange={(e) => setCurrentMessage(e.target.value)}
-        value={currentMessage}
+        value={currentMessage ?? ''}
         onKeyDown={(e) => {
           e.code === 'Enter' ? handlePostMessage() : null
         }}
