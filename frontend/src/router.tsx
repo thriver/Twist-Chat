@@ -1,17 +1,20 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Main from './pages/UserList/UserList'
-import ChatList from './pages/ChatList/ChatList'
+import HomePage from './pages/Home'
+import LoginPage from './pages/Login'
+import Chatrooms from './pages/Chatrooms'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Main />,
-    children: [
-      {
-        path: 'chats/:userId',
-        element: <ChatList />
-      }
-    ]
+    element: <HomePage />
+  },
+  {
+    path: '/login',
+    element: <LoginPage />
+  },
+  {
+    path: '/chatrooms',
+    element: <Chatrooms />
   }
 ])
 
