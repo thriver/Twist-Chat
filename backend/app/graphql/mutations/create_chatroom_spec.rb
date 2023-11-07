@@ -9,7 +9,6 @@ module Mutations
               prompt: "#{prompt}",
               name: "#{name}"
             }){
-            chatroomId,
             errors {
                 message,
                 path
@@ -43,11 +42,13 @@ module Mutations
 
       it "should not a new chatroom if the chatroom has a whitespace name" do
         user = User.create(username: "existing_user")
-        name = "chatroom"
+        name = " "
         twist = "twist"
-        post '/graphql', params: {query: query(username: user.username, name: name, prompt: twist)}
-        json = JSON.parse(response.body)
-        expect(json["data"]["createChatroom"]["chatroomId"]).to eq(Chatroom.count.to_s)
+        expect do
+          post '/graphql', params: {query: query(username: user.username, name: name, prompt: twist)}
+        end.to change {Chatroom.count}.by(0)
+        expect(Chatroom.where(:user_id => user.id)
+                          .where(:name => name).where(:prompt => twist).count).to be(0)
       end
 
 

@@ -4,6 +4,7 @@ module Types
   class UserMessageType < Types::BaseObject
     field :id, ID, null: false
     field :user_id, ID, null: false
+    field :username, String, null: false
     field :chatroom_id, ID, null: false
     field :content, String
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false

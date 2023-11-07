@@ -56,12 +56,41 @@ export interface PostMessageInput {
 
 export type ChatroomPreviewFragment = { readonly __typename: 'Chatroom', readonly id: string, readonly name: string | null, readonly username: string };
 
+export type createChatroomMutationVariables = Exact<{
+  username: Scalars['String']['input'];
+  prompt: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+
+export type createChatroomMutation = { readonly createChatroom: { readonly __typename: 'CreateChatroomPayload', readonly errors: ReadonlyArray<{ readonly __typename: 'CreateChatroomError', readonly message: string }> | null } | null };
+
+export type ReceivedChatroomMessageFragment = { readonly __typename: 'UserMessage', readonly content: string | null, readonly username: string, readonly createdAt: any };
+
+export type SentChatroomMessageFragment = { readonly __typename: 'UserMessage', readonly content: string | null, readonly username: string, readonly createdAt: any };
+
 export type LoginMutationVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
 export type LoginMutation = { readonly login: { readonly __typename: 'LoginUserPayload', readonly user: { readonly __typename: 'LoginResponse', readonly username: string | null } | null, readonly errors: ReadonlyArray<{ readonly __typename: 'LoginError', readonly message: string }> | null } | null };
+
+export type getChatroomMessagesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type getChatroomMessagesQuery = { readonly chatroomMessages: ReadonlyArray<{ readonly __typename: 'UserMessage', readonly id: string, readonly content: string | null, readonly username: string, readonly createdAt: any }> };
+
+export type postMessageMutationVariables = Exact<{
+  username: Scalars['String']['input'];
+  chatroom: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type postMessageMutation = { readonly postMessage: { readonly __typename: 'PostMessagePayload', readonly errors: ReadonlyArray<{ readonly __typename: 'PostMessageError', readonly message: string }> | null } | null };
 
 export type getChatroomsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -75,6 +104,57 @@ export const ChatroomPreviewFragmentDoc = gql`
   username
 }
     `;
+export const ReceivedChatroomMessageFragmentDoc = gql`
+    fragment ReceivedChatroomMessage on UserMessage {
+  content
+  username
+  createdAt
+}
+    `;
+export const SentChatroomMessageFragmentDoc = gql`
+    fragment SentChatroomMessage on UserMessage {
+  content
+  username
+  createdAt
+}
+    `;
+export const createChatroomDocument = gql`
+    mutation createChatroom($username: String!, $prompt: String!, $name: String!) {
+  createChatroom(input: {username: $username, prompt: $prompt, name: $name}) {
+    errors {
+      message
+    }
+  }
+}
+    `;
+export type createChatroomMutationFn = Apollo.MutationFunction<createChatroomMutation, createChatroomMutationVariables>;
+
+/**
+ * __usecreateChatroomMutation__
+ *
+ * To run a mutation, you first call `usecreateChatroomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usecreateChatroomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createChatroomMutation, { data, loading, error }] = usecreateChatroomMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      prompt: // value for 'prompt'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function usecreateChatroomMutation(baseOptions?: Apollo.MutationHookOptions<createChatroomMutation, createChatroomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<createChatroomMutation, createChatroomMutationVariables>(createChatroomDocument, options);
+      }
+export type createChatroomMutationHookResult = ReturnType<typeof usecreateChatroomMutation>;
+export type createChatroomMutationResult = Apollo.MutationResult<createChatroomMutation>;
+export type createChatroomMutationOptions = Apollo.BaseMutationOptions<createChatroomMutation, createChatroomMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String!) {
   login(input: {username: $username}) {
@@ -113,6 +193,83 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const getChatroomMessagesDocument = gql`
+    query getChatroomMessages($id: ID!) {
+  chatroomMessages(id: $id) {
+    id
+    ...ReceivedChatroomMessage
+    ...SentChatroomMessage
+  }
+}
+    ${ReceivedChatroomMessageFragmentDoc}
+${SentChatroomMessageFragmentDoc}`;
+
+/**
+ * __usegetChatroomMessagesQuery__
+ *
+ * To run a query within a React component, call `usegetChatroomMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usegetChatroomMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usegetChatroomMessagesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usegetChatroomMessagesQuery(baseOptions: Apollo.QueryHookOptions<getChatroomMessagesQuery, getChatroomMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<getChatroomMessagesQuery, getChatroomMessagesQueryVariables>(getChatroomMessagesDocument, options);
+      }
+export function usegetChatroomMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<getChatroomMessagesQuery, getChatroomMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<getChatroomMessagesQuery, getChatroomMessagesQueryVariables>(getChatroomMessagesDocument, options);
+        }
+export type getChatroomMessagesQueryHookResult = ReturnType<typeof usegetChatroomMessagesQuery>;
+export type getChatroomMessagesLazyQueryHookResult = ReturnType<typeof usegetChatroomMessagesLazyQuery>;
+export type getChatroomMessagesQueryResult = Apollo.QueryResult<getChatroomMessagesQuery, getChatroomMessagesQueryVariables>;
+export const postMessageDocument = gql`
+    mutation postMessage($username: String!, $chatroom: ID!, $content: String!) {
+  postMessage(
+    input: {username: $username, chatroom: $chatroom, content: $content}
+  ) {
+    errors {
+      message
+    }
+  }
+}
+    `;
+export type postMessageMutationFn = Apollo.MutationFunction<postMessageMutation, postMessageMutationVariables>;
+
+/**
+ * __usepostMessageMutation__
+ *
+ * To run a mutation, you first call `usepostMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usepostMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [postMessageMutation, { data, loading, error }] = usepostMessageMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      chatroom: // value for 'chatroom'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function usepostMessageMutation(baseOptions?: Apollo.MutationHookOptions<postMessageMutation, postMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<postMessageMutation, postMessageMutationVariables>(postMessageDocument, options);
+      }
+export type postMessageMutationHookResult = ReturnType<typeof usepostMessageMutation>;
+export type postMessageMutationResult = Apollo.MutationResult<postMessageMutation>;
+export type postMessageMutationOptions = Apollo.BaseMutationOptions<postMessageMutation, postMessageMutationVariables>;
 export const getChatroomsDocument = gql`
     query getChatrooms {
   chatrooms {

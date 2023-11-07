@@ -13,7 +13,6 @@ const CREATE_CHATROOM = gql`
     createChatroom(
       input: { username: $username, prompt: $prompt, name: $name }
     ) {
-      chatroomId
       errors {
         message
       }
@@ -29,17 +28,20 @@ const CreateChatroomModal: React.FC<CreateChatroomModalProps> = (props) => {
   const [chatroomName, setChatroomName] = useState<string>()
   const [twist, setTwist] = useState<string>()
   const { state } = useUserState()
-  const [createChatroom, { data }] = useMutation(CREATE_CHATROOM)
+  const [createChatroom, { data, reset }] = useMutation(CREATE_CHATROOM)
 
   useEffect(() => {
     if (data) {
-      if (data.errors) {
-        window.alert('Something went wrong, please try again')
+      if (data.createChatroom.errors) {
+        window.alert(data.createChatroom.errors[0].message)
+        reset()
       } else {
         props.setIsOpen(false)
+        reset()
+        setChatroomName(undefined)
       }
     }
-  }, [data, props])
+  }, [data, props, reset])
 
   const handleSubmit = () => {
     createChatroom({
@@ -54,12 +56,17 @@ const CreateChatroomModal: React.FC<CreateChatroomModalProps> = (props) => {
   return (
     <dialog
       open={props.isOpen}
-      onSubmit={handleSubmit}
       className="mt-20 z-20 my-auto min-w-[40%] mx-auto align-middle rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl"
     >
       <div className="flex flex-col gap-y-5 px-10 justify-center">
         <h2 className="text-lg font-bold text-center">Create a Chatroom</h2>
-        <form className="flex flex-col gap-y-5">
+        <form
+          className="flex flex-col gap-y-5"
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit()
+          }}
+        >
           <BaseInput
             label="Chatroom Name:"
             name="name"
@@ -77,6 +84,7 @@ const CreateChatroomModal: React.FC<CreateChatroomModalProps> = (props) => {
               chatroomName.length === 0
             }
             text="Submit"
+            type="submit"
           />
         </form>
         <footer className="flex justify-center my-2">

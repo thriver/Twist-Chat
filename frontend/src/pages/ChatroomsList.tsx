@@ -4,8 +4,9 @@ import { usegetChatroomsQuery } from '../generated/graphql'
 import Loading from '../components/Shared/Loading'
 import ChatroomPreview from '../components/Chatroom/ChatroomPreview'
 import CreateChatroomModal from '../components/Chatroom/CreateChatroomModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUserState } from '../contexts/UserState'
+import { useNavigate } from 'react-router-dom'
 
 gql`
   query getChatrooms {
@@ -21,13 +22,19 @@ const HomePage: React.FC = () => {
   const { data, loading } = usegetChatroomsQuery({
     pollInterval: 500
   })
-  const { state } = useUserState()
+  const { state, setState } = useUserState()
+  const navigate = useNavigate()
 
   const listChatrooms = () => {
     return data?.chatrooms.map((chatroom) => {
       return <ChatroomPreview key={chatroom.id} chatroom={chatroom} />
     })
   }
+
+  useEffect(() => {
+    if (state.username === undefined || state.username === null)
+      navigate('/login')
+  })
 
   if (loading) return <Loading />
 
@@ -45,6 +52,13 @@ const HomePage: React.FC = () => {
           Chatrooms
         </h1>
         <p>Welcome user: {state.username}!</p>
+        <div>
+          <BaseButton
+            text="Logout"
+            onClick={() => setState({ username: undefined })}
+          />
+        </div>
+
         <div>
           <BaseButton
             text="Create a Chatroom"

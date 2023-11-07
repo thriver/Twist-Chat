@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 import HomePage from './pages/Home'
 import LoginPage from './pages/Login'
+import Chatrooms from './pages/ChatroomsList'
+import Chatroom from './pages/Chatroom'
 
-const UnauthorizedRouter = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />
@@ -13,12 +15,12 @@ const UnauthorizedRouter = createBrowserRouter([
   },
   {
     path: '/chatrooms',
-    element: <LoginPage />
+    element: <Chatrooms />
   },
   {
-    path: '*',
-    element: <HomePage />
+    path: '/chatrooms/:chatroomId',
+    element: <Chatroom />
   }
 ])
 
-export default UnauthorizedRouter
+export default router
