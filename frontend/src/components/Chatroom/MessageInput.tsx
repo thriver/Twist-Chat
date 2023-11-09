@@ -48,6 +48,7 @@ const MessageInput: React.FC = () => {
       <BaseInput
         label="Write a Message:"
         name="message-input"
+        data-testid="message-input"
         placeholder="Your Message"
         onChange={(e) => setCurrentMessage(e.target.value)}
         value={currentMessage ?? ''}

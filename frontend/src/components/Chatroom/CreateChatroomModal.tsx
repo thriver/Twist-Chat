@@ -4,7 +4,7 @@ import BaseButton from '../Shared/BaseButton'
 import { gql, useMutation } from '@apollo/client'
 import { useUserState } from '../../contexts/UserState'
 
-const CREATE_CHATROOM = gql`
+export const CREATE_CHATROOM = gql`
   mutation createChatroom(
     $username: String!
     $prompt: String!
@@ -68,11 +68,13 @@ const CreateChatroomModal: React.FC<CreateChatroomModalProps> = (props) => {
           }}
         >
           <BaseInput
+            data-testid="name-input"
             label="Chatroom Name:"
             name="name"
             onChange={(e) => setChatroomName(e.target.value)}
           />
           <BaseInput
+            data-testid="twist-input"
             label="Chatroom Twist (Optional):"
             name="twist"
             onChange={(e) => setTwist(e.target.value)}
