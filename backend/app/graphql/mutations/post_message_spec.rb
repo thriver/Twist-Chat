@@ -60,7 +60,7 @@ module Mutations
       it "should throw an error if chatroom does not exist" do
         user = User.create(username: "existing_user")
         content = "message"
-        chatroom_id = 21
+        chatroom_id = -1
         expect do
           post '/graphql', params: {query: query(username: user.username, chatroom: chatroom_id, content: content)}
         end.to change {UserMessage.count}.by(0)
