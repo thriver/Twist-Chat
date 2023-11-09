@@ -12,7 +12,7 @@ describe('BaseButton', () => {
     const { getByText } = render(
       <BaseButton text="test-content" onClick={mockFunction} />
     )
-    fireEvent(getByText('test-content'), new MouseEvent('click'))
+    fireEvent.click(getByText('test-content'))
     expect(mockFunction).toHaveBeenCalledTimes(1)
   })
 })

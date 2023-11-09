@@ -19,7 +19,7 @@ gql`
   }
 `
 
-const HomePage: React.FC = () => {
+const Chatroom: React.FC = () => {
   const { state } = useUserState()
   const navigate = useNavigate()
 
@@ -73,4 +73,4 @@ const HomePage: React.FC = () => {
   )
 }
 
-export default HomePage
+export default Chatroom

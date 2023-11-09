@@ -16,7 +16,7 @@ gql`
   }
 `
 
-const HomePage: React.FC = () => {
+const Chatrooms: React.FC = () => {
   const [isCreateChatroomModalOpen, setIsCreateChatroomModalOpen] =
     useState<boolean>(false)
   const { data, loading } = usegetChatroomsQuery({
@@ -73,4 +73,4 @@ const HomePage: React.FC = () => {
   )
 }
 
-export default HomePage
+export default Chatrooms
