@@ -38,7 +38,7 @@ const Chatroom: React.FC = () => {
     variables: {
       id: chatroomId
     },
-    pollInterval: 10000
+    pollInterval: 200
   })
 
   const listMessages = () => {
