@@ -1,0 +1,198 @@
+require: rubocop-rails
+
+AllCops:
+  DefaultFormatter: progress
+  DisplayCopNames: true
+  ExtraDetails: true
+  SuggestExtensions: false
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  Exclude:
+    - "bin/*"
+    - "vendor/**/*"
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Layout/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
+Layout/HashAlignment:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+
+Layout/LineLength:
+  Max: 120
+  AllowedPatterns:
+    - '^# [^\n]+'
+
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Lint/DuplicateBranch:
+  IgnoreLiteralBranches: true
+  IgnoreConstantBranches: true
+
+Lint/ShadowingOuterLocalVariable:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/BlockLength:
+  Exclude:
+    - "app/*/concerns/**/*.rb"
+    - "app/indices/**/*.rb"
+    - "app/lib/slack_templates/*.rb"
+    - "app/services/slack_templates/**/*.rb"
+    - "config/routes.rb"
+    - "config/sitemap.rb"
+    - "config/initializers/*.rb"
+    - "db/**/*.rb"
+    - "spec/**/*.rb"
+    - "lib/tasks/**/*.rake"
+    - "config/environments/*.rb"
+
+Metrics/ClassLength:
+  CountAsOne:
+    - array
+    - hash
+    - heredoc
+  Max: 200
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/MethodLength:
+  CountAsOne:
+    - array
+    - heredoc
+    - method_call
+  Max: 20
+  Exclude:
+    - "app/indices/*.rb"
+    - "db/migrate/**/*.rb"
+
+Naming/MethodParameterName:
+  Exclude:
+    - app/queries/*.rb
+    - app/services/query/*.rb
+  AllowedNames:
+    - x
+    - "y"
+    - as
+    - id
+    - in
+    - to
+
+Naming/VariableNumber:
+  Exclude:
+    - spec/**/*
+
+Metrics/ModuleLength:
+  CountComments: false
+  Max: 200
+  Exclude:
+    - "app/indices/*.rb"
+    - "app/lib/constants/*.rb"
+
+Naming/RescuedExceptionsVariableName:
+  PreferredName: error
+
+Rails:
+  Enabled: true
+
+Rails/DynamicFindBy:
+  Enabled: false
+
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/HttpPositionalArguments:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false # This triggers a lot of false positives.
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false # This doesn't work with the Restful concern.
+
+Rails/NotNullColumn:
+  Enabled: false
+
+Rails/Output:
+  Exclude:
+    - "db/migrate/*"
+
+Rails/ReflectionClassName:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  AllowedMethods:
+    - decrement!
+    - increment!
+    - increment_counter
+
+Rails/UnknownEnv:
+  Enabled: true
+  Environments:
+    - development
+    - test
+    - staging
+    - production
+    - e2e
+
+Style/AccessorGrouping:
+  Enabled: true
+  EnforcedStyle: separated
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  EnforcedStyle: assign_inside_condition
+  IncludeTernaryExpressions: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FetchEnvVar:
+  Enabled: false
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+Style/FormatStringToken:
+  Enabled: false # This triggers false positives with `%g`.
+  EnforcedStyle: template
+
+Style/GlobalVars:
+  AllowedVariables:
+    - $config
+    - $redis
+
+Style/HashAsLastArrayItem:
+  EnforcedStyle: no_braces
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/MixinUsage:
+  Exclude:
+    - bin/*
+
+Style/NumericLiterals:
+  Exclude:
+    - "spec/**/*.rb"

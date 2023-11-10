@@ -1,25 +1,26 @@
-class Mutations::CreateChatroom < Mutations::BaseMutation
-  description "Create a chatroom and return its ID. No chatroom can have the same name and owner."
+# frozen_string_literal: true
 
-  argument :username, String, required: true,
-           description: "Username of user who created the chatroom"
-  argument :prompt, String, required: true,
-           description: "Prompt for chatroom. Leave blank/whitespace if no twist"
-  argument :name, String, required: true, description: "Chatroom name"
+class Mutations::CreateChatroom < Mutations::BaseMutation
+  description 'Create a chatroom and return its ID. No chatroom can have the same name and owner.'
+
+  argument :username, String, required:    true,
+                              description: 'Username of user who created the chatroom'
+  argument :prompt, String, required:    true,
+                            description: 'Prompt for chatroom. Leave blank/whitespace if no twist'
+  argument :name, String, required: true, description: 'Chatroom name'
 
   field :errors, [Types::CreateChatroomError], null: true
   field :chatroom_id, ID, null: true
 
   def resolve(username:, prompt:, name:)
-    user = User.find_by(:username => username)
+    user = User.find_by(username: username)
 
     errors = is_chatroom_valid(name, user, username)
-    if errors.count > 0
+    if errors.count.positive?
       return {
-        "errors" => errors.map do |error|
-          path = ["attributes", error.class.to_s]
+        'errors' => errors.map do |error|
           {
-            path: path,
+            path: ['attributes', error.class.to_s],
             message: error.to_s
           }
         end
@@ -28,17 +29,16 @@ class Mutations::CreateChatroom < Mutations::BaseMutation
 
     chatroom = Chatroom.new(user: user, name: name.strip, prompt: prompt.strip)
     if chatroom.save
-      {"chatroom_id" => chatroom.id}
+      { 'chatroom_id' => chatroom.id }
     else
       {
-        "errors" =>
-          chatroom.errors.map do |error|
-            path = ["attributes", error.attribute.to_s.camelize(:lower)]
-            {
-              path: path,
-              message: error.message,
-            }
-          end
+        'errors' =>
+                    chatroom.errors.map do |error|
+                      {
+                        path: ['attributes', error.attribute.to_s.camelize(:lower)],
+                        message: error.message
+                      }
+                    end
       }
     end
   end
@@ -46,18 +46,16 @@ class Mutations::CreateChatroom < Mutations::BaseMutation
   def is_chatroom_valid(name, user, username)
     errors = []
 
-    does_chatroom_exist = Chatroom.where(:user_id => user ? user.id : -1).where(:name => name).count > 0
+    does_chatroom_exist = Chatroom.where(user_id: user ? user.id : -1).where(name: name).count.positive?
 
-    if name.strip.eql? ""
-      errors.append(ArgumentError.new("Chatroom must have a non-blank name."))
+    if name.strip.eql? ''
+      errors.append(ArgumentError.new('Chatroom must have a non-blank name.'))
     elsif does_chatroom_exist
       # Chatroom can only exist if user also exists
       errors.append(ArgumentError.new("Chatroom with owner, #{user.username} and name #{name} already exists."))
     end
 
-    if user == nil
-      errors.append(ArgumentError.new("User, #{username} does not exist"))
-    end
+    errors.append(ArgumentError.new("User, #{username} does not exist")) if user.nil?
 
     errors
   end

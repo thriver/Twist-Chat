@@ -1,7 +1,9 @@
-require_relative "boot"
+# frozen_string_literal: true
 
-require "rails/all"
-require "sprockets/railtie"
+require_relative 'boot'
+
+require 'rails/all'
+require 'sprockets/railtie'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -14,13 +16,15 @@ module Backend
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w(assets tasks))
+    config.autoload_lib(ignore: %w[assets tasks])
 
     config.before_configuration do
-    env_file = File.join(Rails.root, 'config', 'local_env.yml')
-    YAML.load(File.open(env_file)).each do |key, value|
-        ENV[key.to_s] = value
-    end if File.exists?(env_file)
+      env_file = Rails.root.join('config', 'local_env.yml').to_s
+      if File.exist?(env_file)
+        YAML.load(File.open(env_file)).each do |key, value|
+          ENV[key.to_s] = value
+        end
+      end
     end
 
     # Configuration for the application, engines, and railties goes here.

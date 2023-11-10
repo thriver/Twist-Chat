@@ -7,6 +7,7 @@ module Types
     field :username, String, null: false
     field :chatroom_id, ID, null: false
     field :content, String
+    field :twist_message, String
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end

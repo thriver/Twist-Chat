@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTwistMessages < ActiveRecord::Migration[7.1]
   def change
     create_table :twist_messages do |t|

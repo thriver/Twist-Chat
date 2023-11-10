@@ -7,21 +7,20 @@ class GraphqlController < ApplicationController
   # protect_from_forgery with: :null_session
 
   def execute
-    variables = prepare_variables(params[:variables])
-    query = params[:query]
-    operation_name = params[:operationName]
-    context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
-    }
-    result = BackendSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    result = BackendSchema.execute(
+      params[:query], 
+      variables: prepare_variables(params[:variables]), 
+      context: {}, 
+      operation_name: params[:operationName]
+    )
     render json: result
-  rescue StandardError => e
-    raise e unless Rails.env.development?
-    handle_error_in_development(e)
+  rescue StandardError => error
+    raise error unless Rails.env.development?
+
+    handle_error_in_development(error)
   end
 
-  private
+private
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)
@@ -47,6 +46,7 @@ class GraphqlController < ApplicationController
     logger.error e.message
     logger.error e.backtrace.join("\n")
 
-    render json: { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }, status: 500
+    render json:   { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} },
+           status: :internal_server_error
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class Queries::ChatroomQuery < Queries::BaseQuery  
-  description "Return all chatrooms in chronological order"
+class Queries::ChatroomQuery < Queries::BaseQuery
+  description 'Return all chatrooms in chronological order'
 
   type [Types::ChatroomType], null: false
 
