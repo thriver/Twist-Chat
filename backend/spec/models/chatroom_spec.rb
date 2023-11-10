@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: chatrooms
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer          not null
+#  prompt     :string
+#  name       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 RSpec.describe Chatroom do
   user = User.create(username: "user")
   describe "When it is not a twist chat" do

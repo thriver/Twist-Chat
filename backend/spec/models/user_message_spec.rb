@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: user_messages
+#
+#  id          :integer          not null, primary key
+#  user_id     :integer          not null
+#  chatroom_id :integer          not null
+#  content     :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 RSpec.describe UserMessage do
   let(:user) {User.new(username: "username")}
   let(:chatroom) {Chatroom.new(user: user, name: "name", prompt: "prompt")}

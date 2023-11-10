@@ -1,12 +1,12 @@
 import { gql } from '@apollo/client'
-import BaseButton from '../components/Shared/BaseButton'
-import { usegetChatroomsQuery } from '../generated/graphql'
-import Loading from '../components/Shared/Loading'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ChatroomPreview from '../components/Chatroom/ChatroomPreview'
 import CreateChatroomModal from '../components/Chatroom/CreateChatroomModal'
-import { useEffect, useState } from 'react'
+import BaseButton from '../components/Shared/BaseButton'
+import Loading from '../components/Shared/Loading'
 import { useUserState } from '../contexts/UserState'
-import { useNavigate } from 'react-router-dom'
+import { usegetChatroomsQuery } from '../generated/graphql'
 
 gql`
   query getChatrooms {
@@ -20,7 +20,7 @@ const Chatrooms: React.FC = () => {
   const [isCreateChatroomModalOpen, setIsCreateChatroomModalOpen] =
     useState<boolean>(false)
   const { data, loading } = usegetChatroomsQuery({
-    pollInterval: 500
+    pollInterval: 5000
   })
   const { state, setState } = useUserState()
   const navigate = useNavigate()

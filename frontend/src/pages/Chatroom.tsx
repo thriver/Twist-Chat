@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
 import { useEffect } from 'react'
-import { useUserState } from '../contexts/UserState'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { usegetChatroomMessagesQuery } from '../generated/graphql'
-import Loading from '../components/Shared/Loading'
-import BaseButton from '../components/Shared/BaseButton'
-import SentChatroomMessage from '../components/Chatroom/SentChatroomMessage'
-import ReceivedChatroomMessage from '../components/Chatroom/ReceivedChatroomMessage'
 import MessageInput from '../components/Chatroom/MessageInput'
+import ReceivedChatroomMessage from '../components/Chatroom/ReceivedChatroomMessage'
+import SentChatroomMessage from '../components/Chatroom/SentChatroomMessage'
+import BaseButton from '../components/Shared/BaseButton'
+import Loading from '../components/Shared/Loading'
+import { useUserState } from '../contexts/UserState'
+import { usegetChatroomMessagesQuery } from '../generated/graphql'
 
 gql`
   query getChatroomMessages($id: ID!) {
@@ -38,7 +38,7 @@ const Chatroom: React.FC = () => {
     variables: {
       id: chatroomId
     },
-    pollInterval: 200
+    pollInterval: 5000
   })
 
   const listMessages = () => {
