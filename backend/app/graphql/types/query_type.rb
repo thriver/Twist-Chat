@@ -3,11 +3,7 @@
 module Types
   class QueryType < Types::BaseObject
 
-    field :chatrooms, [Types::ChatroomType], null: false,
-          description: "Return all chatrooms in chronological order"
-    def chatrooms
-      Chatroom.all.order(:created_at).joins(:user).select("Chatrooms.*, users.username")
-    end
+    field :chatrooms, resolver: Queries::ChatroomQuery
 
     field :chatroom_messages,
           [Types::UserMessageType], null: false,

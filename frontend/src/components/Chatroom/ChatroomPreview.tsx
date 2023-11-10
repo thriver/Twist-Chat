@@ -7,7 +7,9 @@ gql`
   fragment ChatroomPreview on Chatroom {
     id
     name
-    username
+    user {
+      username
+    }
   }
 `
 
